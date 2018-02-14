@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.liaier.dao.UserDao">
+
+    <resultMap id="UserResult" type="com.liaier.entity.User">
+        <result property="id" column="id" />
+        <result property="createTime" column="create_time" />
+        <result property="loginTime" column="login_time" />
+        <result property="nickname" column="nickname" />
+        <result property="name" column="name" />
+        <result property="deviceId" column="device_id" />
+    </resultMap>
+
+    <insert id="add" parameterType="com.liaier.entity.User">
+       insert into t_user (id,name,nickname,device_id,password,create_time)
+        values (#{id},#{name},#{nickname},#{deviceId},#{password},#{createTime})
+    </insert>
+
+    <select id="query" parameterType="com.liaier.entity.User" resultMap="UserResult">
+        SELECT *
+        FROM
+        t_user
+        <include refid="Where_Clause"/>
+        LIMIT 1
+    </select>
+
+    <!-- 查询条件 -->
+    <sql id="Where_Clause">
+        where 1=1
+        <trim  suffixOverrides="," >
+            <if test="id != null and id !=''"  > and `id`= #{id}</if>
+            <if test="name != null and name !=''"  > and `name`= #{name}</if>
+            <if test="password != null and password !=''"  > and `password`= #{password}</if>
+            <if test="nickname != null and nickname !=''"  > and `nickname`= #{nickname}</if>
+            <if test="deviceId != null and deviceId !=''"  > and `device_id`= #{deviceId}</if>
+        </trim>
+    </sql>
+</mapper>
